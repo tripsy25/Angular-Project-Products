@@ -1,0 +1,77 @@
+
+<div class='card'>
+    <div class='card-header'>
+        {{pageTitle}}
+    </div>
+    <div class='card-body'>
+        <div class='row'>
+            <div class='col-md-2'>Filter by: </div>
+            <div class='col-md-4'><input type='text'
+            [(ngModel)]= "listFilter"/>
+        </div>
+        </div>
+        <div class='row'>
+            <div class='col-md-6'>
+                <h4>Filtered by:{{listFilter}}</h4>
+            </div>
+        </div>
+        <div class='table-responsive'>
+            <table class='table' *ngIf='products.length'>
+                <thead>
+                    <tr>
+                        <th>
+                            <button (click) = 'toggleImage()' class = 'btn btn-primary'>
+                                {{showImage ? 'Hide' : 'Show'}} Image
+                            </button> <!--  EventBinding  & Javascript functionality
+                                with Interpolation-->
+                        </th>
+                        <th>Product</th>
+                        <th>Code</th>
+                        <th>Available</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>5 Star Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor = 'let product of filteredProducts'>
+                        <td>
+                            <img *ngIf = 'showImage'
+                                [src]='product.imageUrl'
+                                [title]='product.productName'
+                                [style.width.px]= 'imageWidth'
+                                [style.margin.px]='imageMargin'>
+                        </td> <!-- Property Binding-->
+                        <td>
+                            <a [routerLink] = "['/products', product.productId]">
+                                {{product.productName}}
+                            </a>
+                        </td>
+                        <td>{{ product.productCode | lowercase | convertToSpaces:'-' }}</td>
+                        <td>{{ product.releaseDate }}</td>
+                        <td>{{ product.description }}</td>
+                        <td>{{ product.price | currency:'USD': 'symbol': '1.2-2'}}</td>
+                        <td><pm-star [rating] = 'product.starrating'
+                            (ratingClicked) = 'onRatingClicked($event)'></pm-star></td>  <!--Here, star component is used as a directive.
+                                                        We also need to include that component in our main module,
+                                                    here it is app.module.ts-->
+
+                        <!--onRatingClicked, we need to include it's definition
+                        inside the product-list.component.ts . Parameter $event will
+                    be passed inside the method.-->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+
+
+
+
+<!-- <span  *ngFor = 'let product of filteredProducts'>
+    {{product | json}}
+    <span>{{product.productName}}</span>
+</span> -->
